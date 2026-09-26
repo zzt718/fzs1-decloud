@@ -18,7 +18,7 @@
 | Chip platform | ASR1802, ASR1803, ASR chipset, ASR Microelectronics |
 | Modules | Quectel EC200T, EC200N, EC200A (same platform, may apply) |
 | Commands | `AT*BAND`, `AT*CELL`, `AT+QENG="servingcell"`, `AT+QNETDEVCTL` |
-| Features | band lock, frequency lock, cell lock, EARFCN, PCI, LTE band |
+| Features | band lock (band-lock), frequency lock (frequency-lock), cell lock (cell-lock), EARFCN, PCI, LTE band |
 | Devices | 蜂助手 S1, MIBOX-668M2, MT7628 4G CPE |
 
 ---

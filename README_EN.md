@@ -6,6 +6,15 @@
 
 > **Note:** This is the English version. The Chinese version is available at [README.md](README.md).
 
+**Scope and keywords** (for search):
+`ASR platform` (ASR1802 / ASR1803, ASR Microelectronics), `Quectel EC200T` / `EC200N` / `EC200A`,
+`AT*BAND` (band lock), `AT*CELL` (frequency lock / cell lock), `EARFCN`, `PCI`,
+`AT+QENG="servingcell"`, `MT7628` 4G CPE, `蜂助手 S1` / `MIBOX-668M2`.
+
+> 📄 **Here only for the modem / AT commands?** See the standalone document —
+> **[ASR Platform LTE Modem AT Commands: Band / Frequency / Cell Lock](ASR-AT-Commands-Band-Cell-Lock.md)**
+> (English) ｜ [中文](ASR平台AT命令-锁频段锁频点锁小区.md)
+
 > ⚠️ **Please read the [Disclaimer](#disclaimer) before use. This project involves modifying the IMEI, which is legally regulated in most countries and regions. Use it only on devices you legally own.**
 
 > 💚 **This project is completely free and open source. There is no paid content of any kind.** We do not sell devices, do not sell services, do not offer a "paid edition", and accept no donations or sponsorships. If you **paid money** for this firmware or this guide, **you were scammed** — demand a refund from the seller, and please report them via a repository Issue. See [About Pricing](#about-pricing).

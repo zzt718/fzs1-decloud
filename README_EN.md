@@ -565,6 +565,15 @@ A: Yes. This project **touches no network config files** (no `/etc/config/*` in 
 
 A: **Use ④ Port Role & WAN Priority in the toolbox** — pick which jack is the wired WAN and whether 4G or wired goes first (includes "4G only" / "Wired only"); one click to apply, no OpenWrt admin panel needed. More advanced multi-uplink setups (e.g. USB dongles) are still fully doable in LuCI at 8888; this project doesn't block any of it.
 
+**Q: Can I still use the stock "WAN priority" switch (WAN 口设置 in the stock admin page)?**
+
+A: **No — and there is no point in hunting for it.** Two reasons:
+
+1. It is a **hidden page**: there is no menu entry for normal users; you can only reach it by typing its URL directly.
+2. Even if you open it, the switch **no longer does anything** on a de-clouded device. The stock firmware implemented priority by deleting every other default route and owning the only one, which conflicts with this project's multi-uplink metric coexistence (see the note under ④); on top of that, the cloud domains are blocked at DNS level.
+
+**For "use the cable when plugged, otherwise 4G", just pick 「Wired first」 in ④** — one click, no reboot.
+
 ## About Pricing
 
 **This project is completely free and open source. There is no paid content of any kind.**

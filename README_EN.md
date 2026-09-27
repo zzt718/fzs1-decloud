@@ -292,6 +292,12 @@ Band lock only limits *which bands are allowed* — **which band the modem actua
 
 > ⚠️ Before choosing "Wired only", make sure the cable is plugged in and the upstream actually has internet. In "all LAN" mode the wired WAN is unavailable.
 
+**Note: this priority system is not the stock "WAN priority"**
+
+- The stock firmware is **exclusive**: whenever an uplink becomes ready (4G dial succeeds, or the WAN port gets a lease) it **deletes every default route** and keeps only its own (the "route murder"). Plugging a dongle or a cable therefore wipes the 4G route, and after that link dies you must wait for the next dial event to recover — that gap is your outage window.
+- This project uses **multi-uplink coexistence with metrics**: each uplink carries its own default route and the metric decides priority (lower = preferred, e.g. wired 5 > 4G 10 > dongle 20 > wired-as-backup 30). When the higher-priority link goes down, its route disappears with the interface and the kernel instantly moves to the next one — no reboot, no waiting for dial events, no healthy uplink collateral damage.
+- The trade-off: every script that writes routes must respect the metric convention. The stock udhcpc script doesn't (it still wipes everyone else's routes), so the toolbox ships a `/etc/udhcpc.user` guard that re-asserts the correct routing (added in v19.7).
+
 ---
 
 ### ⑤ Admin Password (Toolbox → 管理后台密码)

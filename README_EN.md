@@ -23,7 +23,7 @@
 
 **The toolbox UI** (dashboard / ① IMEI changer / ② band lock / ③ cell & frequency lock / ④ admin password):
 
-![Toolbox UI](images/toolbox.png)
+![Toolbox UI](images/toolbox.png?v=2)
 
 ## Hardware Overview
 

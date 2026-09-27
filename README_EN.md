@@ -2,7 +2,7 @@
 
 > Completely removes the vendor cloud-control system from the **蜂助手 S1 (MIBOX-668M2)** CPE,
 > while preserving and enhancing all local functionality.
-> One package replacement + reboot gives you: **cloud-free operation + IMEI changer + band lock + cell/frequency lock + device dashboard**.
+> One package replacement + reboot gives you: **cloud-free operation + IMEI changer + band lock + cell/frequency lock + port role & WAN priority + device dashboard**.
 
 > **Note:** This is the English version. The Chinese version is available at [README.md](README.md).
 
@@ -21,9 +21,9 @@
 
 ---
 
-**The toolbox UI** (dashboard / ① IMEI changer / ② band lock / ③ cell & frequency lock / ④ admin password):
+**The toolbox UI** (dashboard / ① IMEI changer / ② band lock / ③ cell & frequency lock / ④ port role & WAN priority / ⑤ admin password):
 
-![Toolbox UI](images/toolbox.png?v=2)
+![Toolbox UI](images/toolbox.png)
 
 ## Hardware Overview
 
@@ -57,7 +57,7 @@ The device ships in two hardware variants, and **both share one missing part** t
 - **Soldering carries risk**: a short can make the whole USB bus disappear (modem and hub both gone). Ground your iron and check for bridges before powering on
 - The GL850G USB hub exposes one port from the factory; the second can be wired for USB dongles etc.
 - Unstable power to USB dongles can cause reboots — add a capacitor or use separate power
-- The converted LAN→WAN port needs a switch VLAN configured in OpenWrt
+- To turn a LAN jack into the WAN port, use **④ Port Role & WAN Priority** in the toolbox. Note that this device has **no `swconfig`**, so the `switch_vlan` section in `/etc/config/network` is not applied by anything — editing it by hand has no effect
 
 ---
 
@@ -144,15 +144,15 @@ The device reboots in about 1 minute. Then:
 
 | Service | Address | Notes |
 |---|---|---|
-| **Toolbox** | http://192.168.1.1:8088 | Added by this project (IMEI / band lock / cell lock / dashboard / admin password) |
+| **Toolbox** | http://192.168.1.1:8088 | Added by this project (IMEI / band lock / cell lock / port role & WAN priority / dashboard / admin password) |
 | Stock admin | http://192.168.1.1 | Preserved (menu gains "工具箱" and "系统命令行") |
-| LuCI | http://192.168.1.1:8888 | Preserved, **Chinese by default**, set a password in the toolbox first (see ④) |
+| LuCI | http://192.168.1.1:8888 | Preserved, **Chinese by default**, set a password in the toolbox first (see ⑤) |
 | SSH | `ssh root@192.168.1.1` | Preserved |
 
 > 💡 **Port 8888 is the device's full OpenWrt admin panel (LuCI)** — it configures network
 > interfaces, wireless, firewall and more, none of which the stock panel offers.
 > Its root password is **set at the factory to an unknown value**, so you cannot log in until
-> you set your own under "④ 管理后台密码" in the toolbox. The panel is **already in Chinese**.
+> you set your own under "⑤ 管理后台密码" in the toolbox. The panel is **already in Chinese**.
 
 ### If Something Goes Wrong
 
@@ -300,7 +300,7 @@ Port **8888 is a full OpenWrt admin panel (LuCI)** — it configures network, wi
 
 **Its root password was set at the factory to an unknown value, so you cannot log in.** Set your own here:
 
-1. Under "④ 管理后台密码" enter a new password (**at least 8 characters**), then confirm
+1. Under "⑤ 管理后台密码" enter a new password (**at least 8 characters**), then confirm
 2. Click "设置密码" (Set password)
 3. Open http://192.168.1.1:8888 and log in with **root + your password**
 
@@ -524,6 +524,7 @@ A reference procedure for investigating AT commands on less-documented modems:
 2. **The factory band value is hard-coded** `12,78,145,482,149,0,2,2` (this model only)
 3. **The stock "Modify IMEI" page is still broken** (it belongs to the cloud program) → use the toolbox
 4. **The toolbox has no login** — anyone on the LAN can open it. Do not use it on untrusted networks
+5. **The stock admin page's "Cloud Link: Success" and "Speed limit: 64 Kbit/s" are meaningless after de-clouding** — they are stale/default values cached in the firmware. The cloud is blocked at DNS level and **no rate-limiting rule exists on the device**; ignore both readings
 5. **IMEI change requires a reboot** (for write reliability)
 6. **Admin-page upgrade requires `package-full.tar.gz`** (the slim package is rejected)
 7. **The command-line box caps at 256 characters** — long commands belong in `install.sh`
@@ -556,7 +557,7 @@ A: Yes. This project **touches no network config files** (no `/etc/config/*` in 
 
 **Q: How do I use the WAN port / multi-WAN?**
 
-A: That is **standard OpenWrt configuration** (interfaces, routes, firewall in the LuCI at 8888). This project does not change or block any of it — check the wan interface state in LuCI first, then follow any generic OpenWrt guide.
+A: **Use ④ Port Role & WAN Priority in the toolbox** — pick which jack is the wired WAN and whether 4G or wired goes first (includes "4G only" / "Wired only"); one click to apply, no OpenWrt admin panel needed. More advanced multi-uplink setups (e.g. USB dongles) are still fully doable in LuCI at 8888; this project doesn't block any of it.
 
 ## About Pricing
 

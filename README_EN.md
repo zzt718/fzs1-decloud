@@ -56,8 +56,8 @@ The device ships in two hardware variants, and **both share one missing part** t
 - Without U10 handled, **a physical SIM card is not detected** (a common cause of "no service after inserting a card")
 - **Soldering carries risk**: a short can make the whole USB bus disappear (modem and hub both gone). Ground your iron and check for bridges before powering on
 - The GL850G USB hub exposes one port from the factory; the second can be wired for USB dongles etc.
-- Unstable power to USB dongles can cause reboots — add a capacitor or use separate power
-- To turn a LAN jack into the WAN port, use **④ Port Role & WAN Priority** in the toolbox. Note that this device has **no `swconfig`**, so the `switch_vlan` section in `/etc/config/network` is not applied by anything — editing it by hand has no effect
+- **If you plug a USB dongle (portable WiFi) into the USB port you soldered**: unstable power draw (momentary current spikes) can drag down the whole USB bus, causing reboots, dongle dropouts or modem loss — add a capacitor on the USB 5 V rail or power the dongle separately (powered USB hub)
+- **To turn a LAN jack into the WAN port**, use **④ Port Role & WAN Priority** in the toolbox — **no** switch-VLAN configuration in OpenWrt needed. Note: this device has **no `swconfig`**, so the `switch_vlan` section in `/etc/config/network` is not applied by anything — editing it by hand has no effect
 
 ---
 

@@ -188,7 +188,7 @@ To return the device **completely to stock** (vendor cloud control comes back), 
 
 ## Features
 
-> Toolbox layout, top to bottom: **dashboard** (visible immediately) → **① IMEI changer** → **② band lock** → **③ cell/frequency lock** → **④ admin password**.
+> Toolbox layout, top to bottom: **dashboard** (visible immediately) → **① IMEI changer** → **② band lock** → **③ cell/frequency lock** → **④ port role & WAN priority** → **⑤ admin password**.
 
 ### Dashboard (Toolbox home, visible immediately)
 
@@ -274,7 +274,27 @@ Band lock only limits *which bands are allowed* — **which band the modem actua
 
 ---
 
-### ④ Admin Password (Toolbox → 管理后台密码)
+### ④ Port Role & WAN Priority (Toolbox → 网口与上网优先级)
+
+**New in v19.7**. Two things done right from the toolbox, without opening the OpenWrt admin panel:
+
+1. **Pick the wired WAN port**: the three physical jacks (LAN0/LAN1/LAN2) are shown exactly as on the device's back panel. Tap the one you want as WAN — it lights up. Tap it again to cancel = all three jacks stay LAN (4G-only).
+2. **Pick the uplink priority** (four modes):
+
+| Mode | Behavior |
+|---|---|
+| **4G first** (factory default) | Always use 4G; the wired port is only a backup |
+| **Wired first** | Plugged cable takes over automatically; unplug → instantly back to 4G (kernel-level switch, no reboot) |
+| **4G only** | Wired port disabled |
+| **Wired only** | 4G stops carrying traffic (dial stays alive), for tight data plans |
+
+**How it works**: switching is pure routing priority (metric) — the 4G dial always stays online as fallback, network blips for a few seconds on apply, **no reboot needed**. Port roles are set via switch-chip registers and restored automatically at boot.
+
+> ⚠️ Before choosing "Wired only", make sure the cable is plugged in and the upstream actually has internet. In "all LAN" mode the wired WAN is unavailable.
+
+---
+
+### ⑤ Admin Password (Toolbox → 管理后台密码)
 
 Port **8888 is a full OpenWrt admin panel (LuCI)** — it configures network, wireless, firewall, DHCP and more.
 
@@ -612,7 +632,17 @@ This project is provided "as is", without warranty of any kind, express or impli
 
 ## Changelog
 
-### v19.6 (2026-09-26, current)
+### v19.7 (2026-09-27, current)
+
+**④ Port Role & WAN Priority — turn any LAN jack into the WAN port and switch 4G/wired priority right from the toolbox**
+
+- **Port role**: LAN0/LAN1/LAN2 shown graphically (matching the back-panel silkscreen); tap to make it WAN, tap again to cancel = all-LAN (4G only)
+- **Four priority modes**: 4G first (factory) / Wired first (kernel-level instant switch) / 4G only / Wired only
+- **The 4G dial always stays online as fallback** — applying changes blips the network for seconds, no reboot
+- Old ④ admin password becomes ⑤
+- Adds a boot-replay hook in `runapp.sh` and a `/etc/udhcpc.user` routing guard; all other package members are byte-identical to v19.6
+
+### v19.6 (2026-09-26)
 
 **Cell/Frequency Lock released + mobile display fix + UX and stability fixes**
 
@@ -656,11 +686,13 @@ This project is provided "as is", without warranty of any kind, express or impli
 
 | Version | File | md5 | Size |
 |---|---|---|---|
-| **v19.6 (current)** | `package-slim.tar.gz` | `b91e3f9724e4925410001b60a530540e` | 1,268,609 |
-| **v19.6 (current)** | `package-full.tar.gz` | `d1599f9cf428f7fd7e3e21940a872887` | 2,519,091 |
+| **v19.7 (current)** | `package-slim.tar.gz` | `6281e2b1d6b3ac15753ff7c4820a1ed3` | 1,272,735 |
+| **v19.7 (current)** | `package-full.tar.gz` | `1b606a62f0d7e8260306d5e0dc5b8437` | 2,522,483 |
 | Factory restore | [`恢复原厂包/package-full-restore.tar.gz`](恢复原厂包/) | `a29201f8eeeae2e25db5dcd6b410cd6a` | 2,512,242 |
 | Factory restore | [`恢复原厂包/package-slim-restore.tar.gz`](恢复原厂包/) | `e6c776f4d432b1c5c6be3db00c03cea0` | 1,261,714 |
-| v19.4 (previous) | [`历史版本/package-slim-v194.tar.gz`](历史版本/) | `c70367d076f4b4b8f46beaccf13eed72` | 1,262,803 |
+| v19.6 (previous) | [`历史版本/package-slim-v196.tar.gz`](历史版本/) | `b91e3f9724e4925410001b60a530540e` | 1,268,609 |
+| v19.6 (previous) | [`历史版本/package-full-v196.tar.gz`](历史版本/) | `d1599f9cf428f7fd7e3e21940a872887` | 2,519,091 |
+| v19.4 (older) | [`历史版本/package-slim-v194.tar.gz`](历史版本/) | `c70367d076f4b4b8f46beaccf13eed72` | 1,262,803 |
 | v19.4 (previous) | [`历史版本/package-full-v194.tar.gz`](历史版本/) | `c036318b4540af8c4babfc1873920758` | 2,513,658 |
 | v19 (legacy) | [`历史版本/package-slim-v19.tar.gz`](历史版本/) | `39dbd429556b3fda6eb43d4e1809f442` | 1,260,324 |
 | v19 (legacy) | [`历史版本/package-full-v19.tar.gz`](历史版本/) | `4ad6f5f2466331e774105d256b7d2cf2` | 2,510,657 |

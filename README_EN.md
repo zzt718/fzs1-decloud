@@ -84,7 +84,7 @@ The device ships in two hardware variants, and **both share one missing part** t
 > Both packages are **functionally identical**; `full` just embeds a copy of itself (the stock upgrade interface requires that format).
 > **Do not mix them up**: admin-page upload requires `full`; command line requires `slim`.
 >
-> Old versions and the factory-restore package live in subfolders: [`历史版本/`](历史版本/) (v19.4, v19 archives), [`恢复原厂包/`](恢复原厂包/) (to return the device to stock).
+> Old versions and the factory-restore package live in subfolders: [`历史版本/`](历史版本/) (v19.6, v19.4, v19 archives), [`恢复原厂包/`](恢复原厂包/) (to return the device to stock).
 
 ---
 
@@ -128,7 +128,7 @@ cd /tmp && curl -k -sL -o pkg.tar.gz https://gitee.com/zzt718/fzs1-decloud/raw/m
 
 # 2. Verify (must match exactly, otherwise do NOT proceed)
 md5sum pkg.tar.gz
-# Expected: b91e3f9724e4925410001b60a530540e
+# Expected: 6281e2b1d6b3ac15753ff7c4820a1ed3
 
 # 3. Backup + replace + reboot
 cp /usr/aos/package.tar.gz /usr/aos/package.bak

@@ -32,7 +32,7 @@ LAN/WAN 口切换、有线 WAN 口、4G 与有线**上网优先级**、多上行
 | 型号 | 蜂助手 S1（MIBOX-668M2） |
 | 主控 | MT7628DAN |
 | 系统 | OpenWrt Barrier Breaker 14.07 / 内核 3.10.14 |
-| 存储 | 8MB flash / 64MB RAM |
+| 存储 | 16MB flash / 64MB RAM |
 | 4G 模组 | Quectel EC200T（CAT4，主模组） |
 | 云卡模组 | Quectel EC200N（CAT1，内置贴片卡） |
 

@@ -32,7 +32,7 @@
 | Model | 蜂助手 S1 (MIBOX-668M2) |
 | SoC | MediaTek MT7628DAN |
 | OS | OpenWrt Barrier Breaker 14.07 / Kernel 3.10.14 |
-| Storage | 8 MB flash / 64 MB RAM |
+| Storage | 16 MB flash / 64 MB RAM |
 | Main modem | Quectel EC200T (LTE Cat.4) |
 | Cloud SIM module | Quectel EC200N (LTE Cat.1, embedded chip SIM) |
 

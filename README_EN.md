@@ -316,6 +316,17 @@ Port **8888 is a full OpenWrt admin panel (LuCI)** — it configures network, wi
 
 ---
 
+### Settings (Toolbox → 设置)
+
+**Light/dark theme**: one tap switches between the two color schemes. The choice is stored in the browser and restored on the next visit.
+
+**Custom wallpaper**: enter an image link (http/https) to use as the toolbox background. The link is stored **on the device** — every browser, phone or computer sees the same image; the image itself is loaded by each visitor's browser and takes no device storage. Leave the field empty and press 保存 to clear.
+
+- If the wallpaper fails to load it falls back to a solid color with a notice; no function is affected
+- The refresh button sits at the top-right of the dashboard card and refreshes the dashboard only
+
+---
+
 ## What the Cloud Removal Actually Does
 
 **Core idea: do not delete the cloud program (that would hurt stability) — use the firmware's own official switch to empty the cloud-server domain.**

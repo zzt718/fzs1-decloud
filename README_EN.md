@@ -2,7 +2,7 @@
 
 > Completely removes the vendor cloud-control system from the **蜂助手 S1 (MIBOX-668M2)** CPE,
 > while preserving and enhancing all local functionality.
-> One package replacement + reboot gives you: **cloud-free operation + IMEI changer + band lock + cell/frequency lock + port role & WAN priority + device dashboard**.
+> One package replacement + reboot gives you: **cloud-free operation + IMEI changer + band lock + cell/frequency lock + port role & WAN priority + device dashboard + UI themes & custom wallpaper**.
 
 > **Note:** This is the English version. The Chinese version is available at [README.md](README.md).
 
@@ -21,7 +21,7 @@
 
 ---
 
-**The toolbox UI** (dashboard / ① IMEI changer / ② band lock / ③ cell & frequency lock / ④ port role & WAN priority / ⑤ admin password):
+**The toolbox UI** (tabbed: dashboard / ① IMEI changer / ② band lock / ③ cell & frequency lock / ④ port role & WAN priority / ⑤ admin password / settings: light-dark theme · custom wallpaper):
 
 ![Toolbox UI](images/toolbox.png)
 
@@ -648,7 +648,16 @@ This project is provided "as is", without warranty of any kind, express or impli
 
 ## Changelog
 
-### v19.7 (2026-09-27, current)
+### v19.8 (2026-10-15, current)
+
+**Cloud egress hardening + toolbox UI rebuild + custom wallpaper + package size halved**
+
+- **Cloud egress hardening**: the vendor-cached cloud endpoint file is cleared, and the cloud addresses seen in historical logs are rejected on the device's own outbound path; the rule applies only to traffic originated by the device and does not affect LAN clients
+- **Toolbox UI rebuild**: the single long page becomes tabbed; the dashboard is redrawn as a gauge plus stat cards; light/dark themes and a custom background wallpaper are added (the link is stored on the device, every browser sees the same image, the image itself takes no device storage; on failure it falls back to a solid color with a notice); mobile layout fixes
+- **Package size halved**: the `full` package no longer carries a duplicate copy of the payload — 2.53MB down to 1.28MB, matching `slim`; the admin-page upgrade path is unchanged and the command line still uses `slim`
+- **Other**: the mobile SIM settings page now matches the desktop build (local SIM only); the firmware binary is unchanged
+
+### v19.7 (2026-09-27)
 
 **④ Port Role & WAN Priority — turn any LAN jack into the WAN port and switch 4G/wired priority right from the toolbox**
 
@@ -702,8 +711,10 @@ This project is provided "as is", without warranty of any kind, express or impli
 
 | Version | File | md5 | Size |
 |---|---|---|---|
-| **v19.7 (current)** | `package-slim.tar.gz` | `6281e2b1d6b3ac15753ff7c4820a1ed3` | 1,272,735 |
-| **v19.7 (current)** | `package-full.tar.gz` | `1b606a62f0d7e8260306d5e0dc5b8437` | 2,522,483 |
+| **v19.8 (current)** | `package-slim.tar.gz` | `c769c5febe220a6198a9646b1e47ef1d` | 1,283,965 |
+| **v19.8 (current)** | `package-full.tar.gz` | `13e541bbd4ced9fb2ce5a703f68cac6f` | 1,284,131 |
+| v19.7 | [`历史版本/package-slim-v197.tar.gz`](历史版本/) | `6281e2b1d6b3ac15753ff7c4820a1ed3` | 1,272,735 |
+| v19.7 | [`历史版本/package-full-v197.tar.gz`](历史版本/) | `1b606a62f0d7e8260306d5e0dc5b8437` | 2,522,483 |
 | Factory restore | [`恢复原厂包/package-full-restore.tar.gz`](恢复原厂包/) | `a29201f8eeeae2e25db5dcd6b410cd6a` | 2,512,242 |
 | Factory restore | [`恢复原厂包/package-slim-restore.tar.gz`](恢复原厂包/) | `e6c776f4d432b1c5c6be3db00c03cea0` | 1,261,714 |
 | v19.6 (previous) | [`历史版本/package-slim-v196.tar.gz`](历史版本/) | `b91e3f9724e4925410001b60a530540e` | 1,268,609 |

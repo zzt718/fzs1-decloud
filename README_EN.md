@@ -25,6 +25,9 @@
 
 ![Toolbox UI](images/toolbox.png)
 
+> 📦 **v19.7 users can flash v19.8 directly (the package got smaller — nothing was removed).**
+> The v19.8 `full` package dropped from 2.4MB to 1.2MB because the **packaging changed**: the old `full` carried a duplicate copy of the same payload, which v19.8 no longer does. Every expected member is still inside, features were only added (UI themes and custom wallpaper), both install methods and the upgrade notes are unchanged, and existing settings survive the upgrade. If in doubt, verify against the md5 table at the bottom after installing.
+
 ## Hardware Overview
 
 | Item | Specification |
@@ -78,10 +81,10 @@ The device ships in two hardware variants, and **both share one missing part** t
 
 | File | Size | Method |
 |---|---|---|
-| **`package-full.tar.gz`** | 2.4 MB | **Device Admin Page → Software Upgrade (recommended)** |
-| `package-slim.tar.gz` | 1.2 MB | System command line / telnet (methods A/C, smaller) |
+| **`package-full.tar.gz`** | 1.2 MB | **Device Admin Page → Software Upgrade (recommended)** |
+| `package-slim.tar.gz` | 1.2 MB | System command line / telnet (methods A/C) |
 
-> Both packages are **functionally identical**; `full` just embeds a copy of itself (the stock upgrade interface requires that format).
+> Both packages are **functionally identical**. `full` exists for the Device Admin Page → Software Upgrade flow (it carries an extra `pkgmipsel.ldf` member that the upgrade interface writes back as the new app package); since v19.8 that member no longer duplicates the payload, so both packages are about the same size.
 > **Do not mix them up**: admin-page upload requires `full`; command line requires `slim`.
 >
 > Old versions and the factory-restore package live in subfolders: [`历史版本/`](历史版本/) (v19.6, v19.4, v19 archives), [`恢复原厂包/`](恢复原厂包/) (to return the device to stock).
@@ -128,7 +131,7 @@ cd /tmp && curl -k -sL -o pkg.tar.gz https://gitee.com/zzt718/fzs1-decloud/raw/m
 
 # 2. Verify (must match exactly, otherwise do NOT proceed)
 md5sum pkg.tar.gz
-# Expected: 6281e2b1d6b3ac15753ff7c4820a1ed3
+# Expected: c769c5febe220a6198a9646b1e47ef1d (v19.8)
 
 # 3. Backup + replace + reboot
 cp /usr/aos/package.tar.gz /usr/aos/package.bak
@@ -144,7 +147,7 @@ The device reboots in about 1 minute. Then:
 
 | Service | Address | Notes |
 |---|---|---|
-| **Toolbox** | http://192.168.1.1:8088 | Added by this project (IMEI / band lock / cell lock / port role & WAN priority / dashboard / admin password) |
+| **Toolbox** | http://192.168.1.1:8088 | Added by this project (dashboard / ① IMEI changer / ② band lock / ③ cell lock / ④ port role & WAN priority / ⑤ admin password / settings: theme & wallpaper) |
 | Stock admin | http://192.168.1.1 | Preserved (menu gains "工具箱" and "系统命令行") |
 | LuCI | http://192.168.1.1:8888 | Preserved, **Chinese by default**, set a password in the toolbox first (see ⑤) |
 | SSH | `ssh root@192.168.1.1` | Preserved |
@@ -188,7 +191,7 @@ To return the device **completely to stock** (vendor cloud control comes back), 
 
 ## Features
 
-> Toolbox layout, top to bottom: **dashboard** (visible immediately) → **① IMEI changer** → **② band lock** → **③ cell/frequency lock** → **④ port role & WAN priority** → **⑤ admin password**.
+> The toolbox is tabbed (switch with the top tabs): **dashboard** (visible immediately) → **① IMEI changer** → **② band lock** → **③ cell/frequency lock** → **④ port role & WAN priority** → **⑤ admin password** → **settings** (theme / wallpaper).
 
 ### Dashboard (Toolbox home, visible immediately)
 
@@ -334,6 +337,8 @@ Port **8888 is a full OpenWrt admin panel (LuCI)** — it configures network, wi
 The stock admin page has a "Cloud Server" setting. Empty it and the firmware considers the cloud "not configured" and stops all cloud connections. The emptying runs in the boot script (since v18): the firmware reads the persistent `/usr/aos/web_config`, which flashing cannot touch, so every boot re-ensures it is empty.
 
 For the "device keeps switching back to the cloud SIM" bug, three **equal-length binary patches** rewrite the `rm /usr/aos/...` paths (which the cloud program runs to delete local-SIM config) into harmless `/tmp/xxxx*` paths, preserving local-SIM mode permanently.
+
+Since v19.8 there is one more layer, **cloud egress hardening**: the vendor firmware caches its cloud endpoints in `/usr/aos/mibox_domain_desc` (which contains a raw IP that bypasses DNS). v19.8 empties that file at boot and rejects the cloud addresses seen in the logs on the **device's own outbound path** — LAN clients are unaffected.
 
 Other fixes: multi-uplink metric coexistence, firewall forwarding fallback, MSS clamping, Beijing timezone.
 
@@ -541,10 +546,10 @@ A reference procedure for investigating AT commands on less-documented modems:
 2. **The factory band value is hard-coded** `12,78,145,482,149,0,2,2` (this model only)
 3. **The stock "Modify IMEI" page is still broken** (it belongs to the cloud program) → use the toolbox
 4. **The toolbox has no login** — anyone on the LAN can open it. Do not use it on untrusted networks
-5. **The stock admin page's "Cloud Link: Success" and "Speed limit: 64 Kbit/s" are meaningless after de-clouding** — they are stale/default values cached in the firmware. The cloud is blocked at DNS level and **no rate-limiting rule exists on the device**; ignore both readings
-5. **IMEI change requires a reboot** (for write reliability)
-6. **Admin-page upgrade requires `package-full.tar.gz`** (the slim package is rejected)
-7. **The command-line box caps at 256 characters** — long commands belong in `install.sh`
+5. **The stock admin page's "Cloud Link: Success" and "Speed limit: 64 Kbit/s" are meaningless after de-clouding** — they are stale/default values cached in the firmware. Both the domain and the raw-IP paths are blocked at the device's egress (since v19.8) and **no rate-limiting rule exists on the device**; ignore both readings
+6. **IMEI change requires a reboot** (for write reliability)
+7. **Admin-page upgrade requires `package-full.tar.gz`** (the slim package is rejected)
+8. **The command-line box caps at 256 characters** — long commands belong in `install.sh`
 
 > **About "FDD-only band locks cause minutes of reboot-struggling"**: the root cause is a defect in the modem's own BETA firmware (R02 build) — with all TDD bands disabled, the modem may crash-loop during boot scanning. It lives inside the modem firmware and cannot be fixed from the router side; the workaround is **③ Cell/Frequency Lock** (it disables nothing and is unaffected).
 

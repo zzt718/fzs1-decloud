@@ -25,7 +25,7 @@
 # ============================================================
 
 PKG_URL="https://gitee.com/zzt718/fzs1-decloud/raw/master/package-slim.tar.gz"
-PKG_MD5="6281e2b1d6b3ac15753ff7c4820a1ed3"
+PKG_MD5="c769c5febe220a6198a9646b1e47ef1d"
 PKG_SIZE="1272735"
 TARGET="/usr/aos/package.tar.gz"
 BACKUP="/usr/aos/package.bak"
